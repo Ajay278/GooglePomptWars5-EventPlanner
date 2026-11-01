@@ -17,12 +17,16 @@ import {
 
 interface OverviewViewProps {
   plan: FullEventPlan;
+  allPlans?: FullEventPlan[];
+  onSelectPlan?: (planId: string) => void;
   onNavigateTab: (tab: PlannerTab) => void;
   onDeletePlan: (planId: string) => void;
 }
 
 export const OverviewView: React.FC<OverviewViewProps> = ({
   plan,
+  allPlans,
+  onSelectPlan,
   onNavigateTab,
   onDeletePlan,
 }) => {
@@ -252,6 +256,38 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Other Events in Studio Quick Switcher */}
+      {allPlans && allPlans.length > 1 && (
+        <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+              Other Events in Your Studio ({allPlans.length - 1})
+            </h4>
+            <button
+              onClick={() => onNavigateTab('events')}
+              className="text-xs font-semibold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
+            >
+              View Full Events Directory →
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {allPlans
+              .filter((p) => p.id !== plan.id)
+              .map((other) => (
+                <div
+                  key={other.id}
+                  onClick={() => onSelectPlan && onSelectPlan(other.id)}
+                  className="p-3 border border-slate-200 hover:border-slate-400 rounded-md cursor-pointer transition-colors bg-slate-50/50 hover:bg-white"
+                >
+                  <div className="text-2xs font-mono uppercase text-slate-500 font-semibold">{other.eventType}</div>
+                  <div className="text-xs font-bold text-slate-900 truncate mt-0.5">{other.title}</div>
+                  <div className="text-2xs text-slate-500 font-mono mt-1">₹{other.targetBudget.toLocaleString()} · {other.guestCount} guests</div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
 
       {/* Delete / Danger Zone Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-200 text-xs text-slate-500">

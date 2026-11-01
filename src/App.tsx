@@ -3,6 +3,7 @@ import { FullEventPlan } from './types/event';
 import { INITIAL_PLANS } from './data/initialEvents';
 import { Header, PlannerTab } from './components/Header';
 import { EventSelector } from './components/EventSelector';
+import { EventsListView } from './components/EventsListView';
 import { OverviewView } from './components/OverviewView';
 import { BudgetView } from './components/BudgetView';
 import { TimelineView } from './components/TimelineView';
@@ -33,7 +34,7 @@ export default function App() {
     return plans[0]?.id || INITIAL_PLANS[0].id;
   });
 
-  const [currentTab, setCurrentTab] = useState<PlannerTab>('overview');
+  const [currentTab, setCurrentTab] = useState<PlannerTab>('events');
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -92,49 +93,70 @@ export default function App() {
 
       {/* Main Workspace */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Active Event Context Header & Switcher */}
-        <EventSelector
-          plans={plans}
-          activePlanId={activePlan.id}
-          onSelectPlan={setActivePlanId}
-          onOpenCreateModal={() => setIsAiModalOpen(true)}
-        />
-
-        {/* Tab View Routing */}
-        {currentTab === 'overview' && (
-          <OverviewView
-            plan={activePlan}
-            onNavigateTab={setCurrentTab}
+        {/* All Events List Homepage View */}
+        {currentTab === 'events' && (
+          <EventsListView
+            plans={plans}
+            activePlanId={activePlan.id}
+            onSelectPlan={(id, tab) => {
+              setActivePlanId(id);
+              setCurrentTab(tab || 'overview');
+            }}
+            onOpenCreateModal={() => setIsAiModalOpen(true)}
             onDeletePlan={handleDeletePlan}
           />
         )}
 
-        {currentTab === 'budget' && (
-          <BudgetView
-            plan={activePlan}
-            onUpdatePlan={handleUpdatePlan}
-          />
-        )}
+        {/* Active Event Context Header & Switcher (Shown in detailed planner tabs) */}
+        {currentTab !== 'events' && (
+          <>
+            <EventSelector
+              plans={plans}
+              activePlanId={activePlan.id}
+              onSelectPlan={setActivePlanId}
+              onOpenCreateModal={() => setIsAiModalOpen(true)}
+              onNavigateToAllEvents={() => setCurrentTab('events')}
+            />
 
-        {currentTab === 'timeline' && (
-          <TimelineView
-            plan={activePlan}
-            onUpdatePlan={handleUpdatePlan}
-          />
-        )}
+            {/* Tab View Routing */}
+            {currentTab === 'overview' && (
+              <OverviewView
+                plan={activePlan}
+                allPlans={plans}
+                onSelectPlan={setActivePlanId}
+                onNavigateTab={setCurrentTab}
+                onDeletePlan={handleDeletePlan}
+              />
+            )}
 
-        {currentTab === 'vendors' && (
-          <VendorView
-            plan={activePlan}
-            onUpdatePlan={handleUpdatePlan}
-          />
-        )}
+            {currentTab === 'budget' && (
+              <BudgetView
+                plan={activePlan}
+                onUpdatePlan={handleUpdatePlan}
+              />
+            )}
 
-        {currentTab === 'ideas' && (
-          <IdeasInspirationView
-            plan={activePlan}
-            onUpdatePlan={handleUpdatePlan}
-          />
+            {currentTab === 'timeline' && (
+              <TimelineView
+                plan={activePlan}
+                onUpdatePlan={handleUpdatePlan}
+              />
+            )}
+
+            {currentTab === 'vendors' && (
+              <VendorView
+                plan={activePlan}
+                onUpdatePlan={handleUpdatePlan}
+              />
+            )}
+
+            {currentTab === 'ideas' && (
+              <IdeasInspirationView
+                plan={activePlan}
+                onUpdatePlan={handleUpdatePlan}
+              />
+            )}
+          </>
         )}
       </main>
 

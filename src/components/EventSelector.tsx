@@ -1,12 +1,13 @@
 import React from 'react';
 import { FullEventPlan, EventType } from '../types/event';
-import { Calendar, Users, MapPin, IndianRupee, Plus, Sparkles, ChevronDown } from 'lucide-react';
+import { Calendar, Users, MapPin, IndianRupee, Plus, Sparkles, ChevronDown, LayoutGrid, ArrowLeft } from 'lucide-react';
 
 interface EventSelectorProps {
   plans: FullEventPlan[];
   activePlanId: string;
   onSelectPlan: (id: string) => void;
   onOpenCreateModal: () => void;
+  onNavigateToAllEvents?: () => void;
 }
 
 export const EventSelector: React.FC<EventSelectorProps> = ({
@@ -14,6 +15,7 @@ export const EventSelector: React.FC<EventSelectorProps> = ({
   activePlanId,
   onSelectPlan,
   onOpenCreateModal,
+  onNavigateToAllEvents,
 }) => {
   const activePlan = plans.find((p) => p.id === activePlanId) || plans[0];
 
@@ -94,12 +96,22 @@ export const EventSelector: React.FC<EventSelectorProps> = ({
 
         {/* Right Column: Fast Actions */}
         <div className="flex items-center gap-2 shrink-0 self-start lg:self-center">
+          {onNavigateToAllEvents && (
+            <button
+              onClick={onNavigateToAllEvents}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded transition-colors cursor-pointer shadow-2xs"
+            >
+              <LayoutGrid className="w-3.5 h-3.5 text-slate-500" />
+              <span>All Events ({plans.length})</span>
+            </button>
+          )}
+
           <button
             onClick={onOpenCreateModal}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded transition-colors cursor-pointer shadow-2xs"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>New Blank Event</span>
+            <Plus className="w-3.5 h-3.5 text-white" />
+            <span>New Event</span>
           </button>
         </div>
       </div>

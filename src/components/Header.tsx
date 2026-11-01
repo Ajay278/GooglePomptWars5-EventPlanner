@@ -1,7 +1,7 @@
 import React from 'react';
 import { Calendar, Sparkles, Plus } from 'lucide-react';
 
-export type PlannerTab = 'overview' | 'budget' | 'timeline' | 'vendors' | 'ideas';
+export type PlannerTab = 'events' | 'overview' | 'budget' | 'timeline' | 'vendors' | 'ideas';
 
 interface HeaderProps {
   currentTab: PlannerTab;
@@ -15,6 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAiGenerator,
 }) => {
   const tabs: Array<{ id: PlannerTab; label: string }> = [
+    { id: 'events', label: 'All Events' },
     { id: 'overview', label: 'Master Plan' },
     { id: 'budget', label: 'Budget Tracker' },
     { id: 'timeline', label: 'Timelines & Run of Show' },
@@ -31,8 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
             <Calendar className="w-4 h-4 text-slate-100" />
           </div>
           <button
-            onClick={() => onSelectTab('overview')}
-            className="text-lg font-bold tracking-tight text-slate-900 hover:text-slate-700 transition-colors whitespace-nowrap text-left"
+            onClick={() => onSelectTab('events')}
+            className="text-lg font-bold tracking-tight text-slate-900 hover:text-slate-700 transition-colors whitespace-nowrap text-left cursor-pointer"
           >
             Event Planner Studio
           </button>
