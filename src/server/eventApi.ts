@@ -289,7 +289,7 @@ eventApiRouter.post('/suggest-ideas', async (req: Request, res: Response) => {
   return res.json({ success: true, ideas: defaultIdeas });
 });
 
-function createFallbackPlan(req: PlanGenerationRequest): FullEventPlan {
+export function createFallbackPlan(req: PlanGenerationRequest): FullEventPlan {
   const budget = Number(req.targetBudget) || 5000;
   const isWedding = req.eventType === 'wedding';
   const isBirthday = req.eventType === 'birthday';

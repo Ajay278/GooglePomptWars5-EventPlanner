@@ -168,9 +168,10 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 5. Type Checking & Build
+### 5. Automated Testing & Verification
 ```bash
-npm run lint    # Runs tsc --noEmit
+npm test        # Runs native Node.js test suite across all 14 unit & integration tests
+npm run lint    # Runs tsc --noEmit for 100% strict type safety
 npm run build   # Produces optimized production bundle in dist/
 ```
 
